@@ -258,6 +258,7 @@
             // 
             this.Banner.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.Banner.BackColor = System.Drawing.SystemColors.Control;
             this.Banner.Location = new System.Drawing.Point(3, 378);
             this.Banner.Name = "Banner";
             this.Banner.Size = new System.Drawing.Size(648, 71);

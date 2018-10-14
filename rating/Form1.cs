@@ -124,7 +124,7 @@ namespace rating
                 {
                     Text = q.Question,
                     Font = new Font(SystemFonts.DefaultFont.FontFamily, 14f, FontStyle.Bold),
-                    TextAlign=ContentAlignment.MiddleLeft,
+                    TextAlign = ContentAlignment.MiddleLeft,
                     Dock = DockStyle.Fill
                 }, 0, 0);
 
@@ -137,7 +137,7 @@ namespace rating
                         Image = Image.FromFile((!q.Logical) ?
                         (File.Exists(Decoration[$"B{i}"]?.ToString()) ? Decoration[$"B{i}"].ToString() : $"{i}.jpg") :
                         (File.Exists(Decoration[$"L{i}"]?.ToString()) ? Decoration[$"L{i}"].ToString() : $"l{i}.jpg")),
-                        Name = $"{i-1}",
+                        Name = $"{i}",
                         Tag = c,
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
@@ -160,12 +160,13 @@ namespace rating
         private void P_Click(object sender, EventArgs e)
         {
             PictureBox p = sender as PictureBox;
-            int Answer = int.Parse(p.Name.Substring(p.Name.Length - 1)) + 1;
-            label1.Text = $"{Convert.ToInt32(p.Tag)}";
-            label2.Text = $"{Answer}";
+            int Answer = int.Parse(p.Name.Substring(p.Name.Length - 1))/* + 1*/;
             if (A[Convert.ToInt32(p.Tag)] == 0)
+            {
                 A[Convert.ToInt32(p.Tag)] = Answer;
-            MarkSelected(p);
+                MarkSelected(p);
+            }
+
             button1.Enabled = CanFire(A);
             if (!timer1.Enabled)
                 timer1.Start();
@@ -177,7 +178,34 @@ namespace rating
         /// <param name="p"></param>
         private void MarkSelected(PictureBox p)
         {
-            p.BorderStyle = BorderStyle.FixedSingle;
+            //p.BorderStyle = BorderStyle.FixedSingle;
+            //Graphics G = p.CreateGraphics();
+            //G.DrawRectangle(Pens.Red, 0, 0, p.Width - 1, p.Height - 1);
+            //G.Dispose();
+            foreach (Control c in p.Parent.Controls)
+            {
+                if ((c.GetType() == typeof(PictureBox)) && (c != p))
+                        c.Visible = false;
+            }
+            //p.Invalidate();
+        }
+
+        /// <summary>
+        /// Отметка выбора
+        /// </summary>
+        /// <param name="p"></param>
+        private void UnMarkSelected(PictureBox p)
+        {
+            //p.BorderStyle = BorderStyle.FixedSingle;
+            //Graphics G = p.CreateGraphics();
+            //G.DrawRectangle(Pens.White, 0, 0, p.Width - 1, p.Height - 1);
+            //G.Dispose();
+            foreach (Control c in p.Parent.Controls)
+            {
+                if (c.GetType() == typeof(PictureBox))
+                    c.Visible = true;
+            }
+            //p.Invalidate();
         }
 
         public List<Questions> LoadQuestions(string path = "questions.xml")
@@ -208,11 +236,7 @@ namespace rating
                 timer2.Stop();
             else
                 timer2.Start();
-            label1.Text = string.Empty;
-            label2.Text = string.Empty;
-            textBox1.Text = string.Empty;
-            pictureBox2.Image = null;
-            A = new int[Q.Count()]; // ответы
+            Renew();
         }
 
         private void Send_Click(object sender, EventArgs e)
@@ -254,24 +278,33 @@ namespace rating
                 Renew();
             }
         }
-        
+
         /// <summary>
         /// Восстановление фронта
         /// </summary>
         private void Renew()
         {
             int i = 0;
+            if (timer1.Enabled)
+                timer1.Stop();
+            if (timer2.Enabled)
+                timer2.Stop();
             foreach (Control c in tableLayoutPanel1.Controls)
             {
                 if (c.GetType() == typeof(TableLayoutPanel))
                 {
                     TableLayoutPanel C1 = c as TableLayoutPanel;
-                    int A1 = A[i++];
-                    PictureBox pb = (PictureBox)C1.GetControlFromPosition(A1 - 1, 1);
-                    pb.BorderStyle = BorderStyle.None;
+                    foreach (Control cc in C1.Controls)
+                        cc.Visible = true;
+                    //int A1 = A[i++];
+                    //if (A1 != 0)
+                    //{
+                    //    PictureBox pb = (PictureBox)C1.GetControlFromPosition(A1 - 1, 1);
+                    //    UnMarkSelected(pb);
+                    //    pb.BorderStyle = BorderStyle.None;
+                    //}
                 }
             }
-
             A = new int[Q.Count()]; // ответы
             button1.Enabled = CanFire(A);
         }
