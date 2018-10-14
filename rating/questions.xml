@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<Tablo>
+  <Decoration>
+    <LeftTop></LeftTop>
+    <Top></Top>
+    <RightTop></RightTop>
+    <Left></Left>
+    <Right></Right>
+    <LeftBottom></LeftBottom>
+    <Bottom></Bottom>
+    <RightBittom></RightBittom>
+    <B1>1.jpg</B1>
+    <B2>2.jpg</B2>
+    <B3>3.jpg</B3>
+    <B4>4.jpg</B4>
+    <B5>5.jpg</B5>
+    <B6>6.jpg</B6>
+    <B7>7.jpg</B7>
+    <B8>8.jpg</B8>
+    <B9>9.jpg</B9>
+    <B0>0.jpg</B0>
+    <L1>l1.jpg</L1>     <!-- Да  -->
+    <L2>l2.jpg</L2>          <!-- Нет -->
+    <Camera>false</Camera> <!-- true/false -->
+    <Banner>banner1.jpg</Banner>> <!-- 648,71 -->
+  </Decoration>
+  <Questions>
+    <Q Answers="9">Оцените длинну очереди в туалет</Q>
+    <Q Answers="9">Чистота в туалете</Q>
+    <Q Answers="2" Logical="true">Понравился Вам наш сервис</Q>
+    <Q Answers="9">Оцените время ожидания перед кабинетом врача, пока тот пьет чай</Q>
+    <Q Answers="9">Профпригодность персонала</Q>
+    <Q Answers="9">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Q>
+  </Questions>
+</Tablo>
