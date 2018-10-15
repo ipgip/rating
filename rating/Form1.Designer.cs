@@ -316,12 +316,12 @@
         private System.Windows.Forms.Timer timer2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.PictureBox LeftTop;
-        private System.Windows.Forms.PictureBox Top;
+        private new System.Windows.Forms.PictureBox  Top;
         private System.Windows.Forms.PictureBox RightTop;
-        private System.Windows.Forms.PictureBox Left;
-        private System.Windows.Forms.PictureBox Right;
+        private new System.Windows.Forms.PictureBox Left;
+        private new System.Windows.Forms.PictureBox Right;
         private System.Windows.Forms.PictureBox LeftBottom;
-        private System.Windows.Forms.PictureBox Bottom;
+        private new System.Windows.Forms.PictureBox Bottom;
         private System.Windows.Forms.PictureBox RightBottom;
         private System.Windows.Forms.PictureBox Banner;
     }

@@ -284,7 +284,7 @@ namespace rating
         /// </summary>
         private void Renew()
         {
-            int i = 0;
+            //int i = 0;
             if (timer1.Enabled)
                 timer1.Stop();
             if (timer2.Enabled)
