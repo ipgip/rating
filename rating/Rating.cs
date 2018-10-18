@@ -18,18 +18,17 @@ using System.Xml.Linq;
 
 namespace rating
 {
-    public partial class Form1 : Form
+    public partial class Rating : Form
     {
         List<Questions> Q;
         FilterInfoCollection videodevices;
         VideoCaptureDevice device;
         Bitmap Snapshort = null;
-        ManualResetEvent flg = new ManualResetEvent(false);
         private Hashtable Decoration = new Hashtable();
 
         int[] A; // ответы
 
-        public Form1()
+        public Rating()
         {
             InitializeComponent();
             Q = LoadQuestions();
@@ -61,7 +60,7 @@ namespace rating
                 {
                     device = new VideoCaptureDevice(videodevices[0].MonikerString);
                     device.NewFrame += CapturePicture;
-                    flg.Reset();
+                    //flg.Reset();
                     device.Start();
                 }
             }
@@ -133,7 +132,7 @@ namespace rating
                 {
                     PictureBox p = new PictureBox
                     {
-                        Dock = (!q.Logical) ? DockStyle.Fill : (i == 1) ? DockStyle.Right : DockStyle.Left,
+                       // Dock = (!q.Logical) ? DockStyle.None : (i == 1) ? DockStyle.Right : DockStyle.Left,
                         Image = Image.FromFile((!q.Logical) ?
                         (File.Exists(Decoration[$"B{i}"]?.ToString()) ? Decoration[$"B{i}"].ToString() : $"{i}.jpg") :
                         (File.Exists(Decoration[$"L{i}"]?.ToString()) ? Decoration[$"L{i}"].ToString() : $"l{i}.jpg")),
@@ -149,13 +148,14 @@ namespace rating
             }
             #endregion
         }
-
+        #region AForge
         private void CapturePicture(object sender, NewFrameEventArgs eventArgs)
         {
             Snapshort = (Bitmap)(eventArgs.Frame.Clone());
             pictureBox1.Image = Snapshort;
-            flg.Set();
+            //flg.Set();
         }
+        #endregion
 
         private void P_Click(object sender, EventArgs e)
         {
@@ -208,22 +208,32 @@ namespace rating
             //p.Invalidate();
         }
 
-        public List<Questions> LoadQuestions(string path = "questions.xml")
+        public List<Questions> LoadQuestions(string path = @"c:\temp\questions.xml")
         {
             List<Questions> ret = new List<Questions>();
-            XDocument doc = XDocument.Load(path);
-            // Загрузка декора
-            foreach (XElement el in doc.Root.Descendants("Decoration").Elements())
+            try
             {
-                Decoration[el.Name.LocalName] = el.Value;
+                XDocument doc = XDocument.Load(path);
+                // Загрузка декора
+                foreach (XElement el in doc.Root.Descendants("Decoration").Elements())
+                {
+                    Decoration[el.Name.LocalName] = el.Value;
+                }
+                // Загрузка вопросов
+                foreach (XElement el in doc.Root.Descendants("Questions").Elements())
+                {
+                    ret.Add(new Questions(
+                        el.Value,
+                        int.Parse(el.Attribute("Answers").Value.ToString()),
+                        (el.Attribute("Logical") != null) ? Convert.ToBoolean(el.Attribute("Logical").Value) : false));
+                }
+
             }
-            // Загрузка вопросов
-            foreach (XElement el in doc.Root.Descendants("Questions").Elements())
+            catch (FileNotFoundException)
             {
-                ret.Add(new Questions(
-                    el.Value,
-                    int.Parse(el.Attribute("Answers").Value.ToString()),
-                    (el.Attribute("Logical") != null) ? Convert.ToBoolean(el.Attribute("Logical").Value) : false));
+                if (device.IsRunning)
+                    device.Stop();
+                Application.Exit();
             }
             return ret;
         }
@@ -258,11 +268,11 @@ namespace rating
                     XAttribute attr = new XAttribute($"a{i++}", $"{A1}");
                     e2.Add(attr);
                 }
-                if (File.Exists("rating.xml"))
+                if (File.Exists(@"c:\temp\rating.xml"))
                 {
                     XDocument doc = XDocument.Load("Rating.xml");
                     doc.Root.Add(e2);
-                    doc.Save("rating.xml");
+                    doc.Save(@"c:\temp\rating.xml");
                 }
                 else
                 {
@@ -270,7 +280,7 @@ namespace rating
                     XElement e1 = new XElement("Ratings");
                     e1.Add(e2);
                     doc.Add(e1);
-                    doc.Save("rating.xml");
+                    doc.Save(@"c:\temp\rating.xml");
                 }
                 timer2.Start();
                 // передача на сервер

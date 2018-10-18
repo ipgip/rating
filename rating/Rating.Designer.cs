@@ -1,6 +1,6 @@
 ﻿namespace rating
 {
-    partial class Form1
+    partial class Rating
     {
         /// <summary>
         /// Обязательная переменная конструктора.
